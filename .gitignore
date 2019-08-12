@@ -11,6 +11,8 @@ local.properties
 .recommenders
 .classpath
 .project
+.gradle/
+*.jar
 
 # External tool builders
 .externalToolBuilders/
