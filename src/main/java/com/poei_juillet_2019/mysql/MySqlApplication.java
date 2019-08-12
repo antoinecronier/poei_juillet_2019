@@ -8,6 +8,7 @@ import java.util.Date;
 
 import com.mysql.fabric.xmlrpc.base.Data;
 import com.poei_juillet_2019.mysql.database.DbOpenHelper;
+import com.poei_juillet_2019.mysql.database.UserDao;
 import com.poei_juillet_2019.mysql.entities.User;
 
 /**
@@ -27,6 +28,10 @@ public final class MySqlApplication {
      */
     public static void main(String[] args) {
 
+        UserDao dao = new UserDao();
+        dao.drop();
+        dao.create();
+/*
         try {
             User.playDrop();
             User.playCreate();
@@ -60,6 +65,6 @@ public final class MySqlApplication {
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        }
+        }*/
     }
 }
