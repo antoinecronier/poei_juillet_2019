@@ -100,8 +100,12 @@ public class User {
     }
 
     public static String create() {
-        return "CREATE TABLE IF NOT EXISTS User(" + "id int NOT NULL AUTO_INCREMENT PRIMARY KEY," + "firstname VARCHAR(255) NOT NULL,"
-                + "lastname VARCHAR(255) NOT NULL," + "dateOfBirth DATETIME NOT NULL" + ")";
+        return "CREATE TABLE IF NOT EXISTS User(" +
+                "id int NOT NULL AUTO_INCREMENT PRIMARY KEY," +
+                "firstname VARCHAR(255) NOT NULL," +
+                "lastname VARCHAR(255) NOT NULL," +
+                "dateOfBirth DATETIME NOT NULL" +
+                ")";
     }
 
     public static void playCreate() throws SQLException {
@@ -109,7 +113,7 @@ public class User {
     }
 
     public static String drop() {
-        return "DROP TABLE User;";
+        return "DROP IF EXISTS TABLE User;";
     }
 
     public static void playDrop() throws SQLException {
