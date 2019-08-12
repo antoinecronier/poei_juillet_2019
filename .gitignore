@@ -13,6 +13,7 @@ local.properties
 .project
 .gradle/
 *.jar
+build/
 
 # External tool builders
 .externalToolBuilders/
