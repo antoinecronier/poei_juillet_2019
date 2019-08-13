@@ -41,9 +41,9 @@ public class UserContract {
         result.append(") VALUES(");
 
         for (int i = 0; i < COLS.length - 1; i++) {
-            result.append("%s,");
+            result.append("?,");
         }
-        result.append("%s");
+        result.append("?");
 
         result.append(")");
         return result.toString();

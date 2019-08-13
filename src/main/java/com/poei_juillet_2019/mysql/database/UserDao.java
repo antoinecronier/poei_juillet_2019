@@ -54,11 +54,15 @@ public class UserDao implements Dao {
             SimpleDateFormat sdf = new java.text.SimpleDateFormat("YYYY-MM-DD hh:mm:ss");
             String mySqlDateOfBirth = sdf.format(item.getDateOfBirth());
 
-            String request = String.format(UserContract.INSERT(),"null",item.getFirstname(),item.getLastname(),mySqlDateOfBirth);
+            String request = UserContract.INSERT();
             PreparedStatement ps = null;
             try {
                 ps = DbOpenHelper.getInstance().getConn()
                     .prepareStatement(request);
+                ps.setInt(1, item.getId());
+                ps.setString(2, item.getFirstname());
+                ps.setString(3, item.getLastname());
+                ps.setString(4, mySqlDateOfBirth);
                 ps.execute();
             } catch (SQLException e) {
                 e.printStackTrace();
