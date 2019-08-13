@@ -49,6 +49,14 @@ public class UserContract {
         return result.toString();
     }
 
+    public final static String DELETE() {
+        StringBuilder result = new StringBuilder();
+
+        result.append("DELETE FROM " + TABLE + " WHERE " + COL_ID + " = ?");
+
+        return result.toString();
+    }
+
     public final static String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS "+ TABLE +"(" +
             COL_ID + " int NOT NULL AUTO_INCREMENT PRIMARY KEY," +
             COL_FIRSTNAME + " VARCHAR(255) NOT NULL," +
@@ -57,4 +65,5 @@ public class UserContract {
             ")";
 
     public final static String DROP_TABLE = "DROP TABLE " + TABLE;
+
 }

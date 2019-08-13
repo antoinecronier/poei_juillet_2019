@@ -84,8 +84,26 @@ public class UserDao implements Dao {
 
     @Override
     public void delete(Object obj) {
-        // TODO Auto-generated method stub
+        if (obj instanceof User) {
+            User item = (User) obj;
 
+            String request = UserContract.DELETE();
+            PreparedStatement ps = null;
+            try {
+                ps = DbOpenHelper.getInstance().getConn()
+                    .prepareStatement(request);
+                ps.setInt(1, item.getId());
+                ps.execute();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     @Override
