@@ -1,4 +1,4 @@
-package com.poei_juillet_2019.mysql.database;
+package com.poei_juillet_2019.mysql.database.dao;
 
 import java.util.List;
 

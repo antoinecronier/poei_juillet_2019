@@ -3,24 +3,17 @@ package com.poei_juillet_2019.mysql;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import com.mysql.fabric.xmlrpc.base.Data;
 import com.poei_juillet_2019.mysql.database.DbManager;
-import com.poei_juillet_2019.mysql.database.DbOpenHelper;
-import com.poei_juillet_2019.mysql.database.UserDao;
+import com.poei_juillet_2019.mysql.entities.Role;
 import com.poei_juillet_2019.mysql.entities.User;
 
 /**
@@ -41,24 +34,8 @@ public final class MySqlApplication {
      */
     public static void main(String[] args) throws ParseException {
 
-        DbManager.getInstance().getUserDao().drop();
-        DbManager.getInstance().getUserDao().create();
-        User user = new User("raoul", "michel", new SimpleDateFormat("yyyy/mm/dd").parse("1990/04/24"));
-        DbManager.getInstance().getUserDao().insert(user);
-        DbManager.getInstance().getUserDao().insert(user);
-        User user1 = new User("rjsdfojdsojf", "sdfsdfsdf", new SimpleDateFormat("yyyy/mm/dd").parse("1980/04/24"));
-        DbManager.getInstance().getUserDao().insert(user1);
-        user.setId(1);
-        DbManager.getInstance().getUserDao().delete(user);
-        user.setId(2);
-        user.setFirstname("jean");
-        DbManager.getInstance().getUserDao().update(user);
-
-        for (Object obj : DbManager.getInstance().getUserDao().select()) {
-            System.out.println(obj.toString());
-        }
-
-        System.out.println(DbManager.getInstance().getUserDao().select(2));
+        userTests();
+        roleTests();
         /*
         try {
             User.playDrop();
@@ -109,6 +86,48 @@ public final class MySqlApplication {
 //        }
 //
 //        System.out.println(fielder(new User("raoul", "michel", new SimpleDateFormat("yyyy/mm/dd").parse("1990/04/24"))));
+    }
+
+    private static void roleTests() {
+        DbManager.getInstance().getRoleDao().drop();
+        DbManager.getInstance().getRoleDao().create();
+        Role role = new Role("role1");
+        DbManager.getInstance().getRoleDao().insert(role);
+        DbManager.getInstance().getRoleDao().insert(role);
+        Role role1 = new Role("Role2");
+        DbManager.getInstance().getRoleDao().insert(role1);
+        role.setId(1);
+        DbManager.getInstance().getRoleDao().delete(role);
+        role.setId(2);
+        role.setName("jean");
+        DbManager.getInstance().getRoleDao().update(role);
+
+        for (Object obj : DbManager.getInstance().getRoleDao().select()) {
+            System.out.println(obj.toString());
+        }
+
+        System.out.println(DbManager.getInstance().getRoleDao().select(2));
+    }
+
+    private static void userTests() throws ParseException {
+        DbManager.getInstance().getUserDao().drop();
+        DbManager.getInstance().getUserDao().create();
+        User user = new User("raoul", "michel", new SimpleDateFormat("yyyy/mm/dd").parse("1990/04/24"));
+        DbManager.getInstance().getUserDao().insert(user);
+        DbManager.getInstance().getUserDao().insert(user);
+        User user1 = new User("rjsdfojdsojf", "sdfsdfsdf", new SimpleDateFormat("yyyy/mm/dd").parse("1980/04/24"));
+        DbManager.getInstance().getUserDao().insert(user1);
+        user.setId(1);
+        DbManager.getInstance().getUserDao().delete(user);
+        user.setId(2);
+        user.setFirstname("jean");
+        DbManager.getInstance().getUserDao().update(user);
+
+        for (Object obj : DbManager.getInstance().getUserDao().select()) {
+            System.out.println(obj.toString());
+        }
+
+        System.out.println(DbManager.getInstance().getUserDao().select(2));
     }
 
     public static <T> T createContentsWithId(Long id, Class<T> clazz) {

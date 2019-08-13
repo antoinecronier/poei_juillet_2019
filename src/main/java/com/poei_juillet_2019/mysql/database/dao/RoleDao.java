@@ -1,25 +1,24 @@
-package com.poei_juillet_2019.mysql.database;
+package com.poei_juillet_2019.mysql.database.dao;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import com.poei_juillet_2019.mysql.database.contracts.UserContract;
-import com.poei_juillet_2019.mysql.entities.User;
+import com.poei_juillet_2019.mysql.database.DbOpenHelper;
+import com.poei_juillet_2019.mysql.database.contracts.RoleContract;
+import com.poei_juillet_2019.mysql.entities.Role;
 
-public class UserDao implements Dao {
+public class RoleDao implements Dao {
 
     @Override
     public void create() {
         PreparedStatement ps = null;
         try {
             ps = DbOpenHelper.getInstance().getConn()
-                .prepareStatement(UserContract.CREATE_TABLE);
+                .prepareStatement(RoleContract.CREATE_TABLE);
             ps.execute();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -37,7 +36,7 @@ public class UserDao implements Dao {
         PreparedStatement ps = null;
         try {
             ps = DbOpenHelper.getInstance().getConn()
-                .prepareStatement(UserContract.DROP_TABLE);
+                .prepareStatement(RoleContract.DROP_TABLE);
             ps.execute();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -52,21 +51,16 @@ public class UserDao implements Dao {
 
     @Override
     public void insert(Object obj) {
-        if (obj instanceof User) {
-            User item = (User) obj;
+        if (obj instanceof Role) {
+            Role item = (Role) obj;
 
-            SimpleDateFormat sdf = new java.text.SimpleDateFormat("YYYY-MM-DD hh:mm:ss");
-            String mySqlDateOfBirth = sdf.format(item.getDateOfBirth());
-
-            String request = UserContract.INSERT();
+            String request = RoleContract.INSERT();
             PreparedStatement ps = null;
             try {
                 ps = DbOpenHelper.getInstance().getConn()
                     .prepareStatement(request);
                 ps.setInt(1, item.getId());
-                ps.setString(2, item.getFirstname());
-                ps.setString(3, item.getLastname());
-                ps.setString(4, mySqlDateOfBirth);
+                ps.setString(2, item.getName());
                 ps.execute();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -82,21 +76,16 @@ public class UserDao implements Dao {
 
     @Override
     public void update(Object obj) {
-        if (obj instanceof User) {
-            User item = (User) obj;
+        if (obj instanceof Role) {
+            Role item = (Role) obj;
 
-            SimpleDateFormat sdf = new java.text.SimpleDateFormat("YYYY-MM-DD hh:mm:ss");
-            String mySqlDateOfBirth = sdf.format(item.getDateOfBirth());
-
-            String request = UserContract.UPDATE();
+            String request = RoleContract.UPDATE();
             PreparedStatement ps = null;
             try {
                 ps = DbOpenHelper.getInstance().getConn()
                     .prepareStatement(request);
-                ps.setString(1, item.getFirstname());
-                ps.setString(2, item.getLastname());
-                ps.setString(3, mySqlDateOfBirth);
-                ps.setInt(4, item.getId());
+                ps.setString(1, item.getName());
+                ps.setInt(2, item.getId());
                 ps.execute();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -112,10 +101,10 @@ public class UserDao implements Dao {
 
     @Override
     public void delete(Object obj) {
-        if (obj instanceof User) {
-            User item = (User) obj;
+        if (obj instanceof Role) {
+            Role item = (Role) obj;
 
-            String request = UserContract.DELETE();
+            String request = RoleContract.DELETE();
             PreparedStatement ps = null;
             try {
                 ps = DbOpenHelper.getInstance().getConn()
@@ -138,7 +127,7 @@ public class UserDao implements Dao {
     public List<Object> select() {
         List<Object> result = new ArrayList<Object>();
 
-        String request = UserContract.SELECTALL();
+        String request = RoleContract.SELECTALL();
         PreparedStatement ps = null;
         try {
             ps = DbOpenHelper.getInstance().getConn()
@@ -165,9 +154,9 @@ public class UserDao implements Dao {
 
     @Override
     public Object select(int id) {
-        User result = null;
+        Role result = null;
 
-        String request = UserContract.SELECT();
+        String request = RoleContract.SELECT();
         PreparedStatement ps = null;
         try {
             ps = DbOpenHelper.getInstance().getConn()
@@ -175,7 +164,7 @@ public class UserDao implements Dao {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                User item = parseFromDbToJava(rs);
+                Role item = parseFromDbToJava(rs);
                 result = item;
             }
             rs.close();
@@ -194,20 +183,10 @@ public class UserDao implements Dao {
         return result;
     }
 
-    private User parseFromDbToJava(ResultSet rs) throws SQLException, ParseException {
-        User item = new User();
-        item.setId(rs.getInt(rs.findColumn(UserContract.COL_ID)));
-        item.setFirstname(rs.getString(rs.findColumn(UserContract.COL_FIRSTNAME)));
-        item.setLastname(rs.getString(rs.findColumn(UserContract.COL_LASTNAME)));
-
-//                SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD hh:mm:ss");
-//                String sqlDate = rs.getString(rs.findColumn(UserContract.COL_DATE_OF_BIRTH));
-//                Date javaDate = sdf.parse(sqlDate);
-//                item.setDateOfBirth( javaDate);
-
-        item.setDateOfBirth(
-                new SimpleDateFormat("YYYY-MM-DD hh:mm:ss")
-                    .parse(rs.getString(rs.findColumn(UserContract.COL_DATE_OF_BIRTH))));
+    private Role parseFromDbToJava(ResultSet rs) throws SQLException, ParseException {
+        Role item = new Role();
+        item.setId(rs.getInt(rs.findColumn(RoleContract.COL_ID)));
+        item.setName(rs.getString(rs.findColumn(RoleContract.COL_NAME)));
         return item;
     }
 
