@@ -1,8 +1,12 @@
 package com.poei_juillet_2019.mysql.database;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.poei_juillet_2019.mysql.database.contracts.UserContract;
@@ -132,8 +136,43 @@ public class UserDao implements Dao {
 
     @Override
     public List<Object> select() {
-        // TODO Auto-generated method stub
-        return null;
+        List<Object> result = new ArrayList<Object>();
+
+        String request = UserContract.SELECTALL();
+        PreparedStatement ps = null;
+        try {
+            ps = DbOpenHelper.getInstance().getConn()
+                .prepareStatement(request);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                User item = new User();
+                item.setId(rs.getInt(rs.findColumn(UserContract.COL_ID)));
+                item.setFirstname(rs.getString(rs.findColumn(UserContract.COL_FIRSTNAME)));
+                item.setLastname(rs.getString(rs.findColumn(UserContract.COL_LASTNAME)));
+
+//                SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD hh:mm:ss");
+//                String sqlDate = rs.getString(rs.findColumn(UserContract.COL_DATE_OF_BIRTH));
+//                Date javaDate = sdf.parse(sqlDate);
+//                item.setDateOfBirth( javaDate);
+
+                item.setDateOfBirth(
+                        new SimpleDateFormat("YYYY-MM-DD hh:mm:ss")
+                            .parse(rs.getString(rs.findColumn(UserContract.COL_DATE_OF_BIRTH))));
+                result.add(item);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                ps.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return result;
     }
 
     @Override

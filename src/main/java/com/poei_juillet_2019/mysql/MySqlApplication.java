@@ -53,6 +53,10 @@ public final class MySqlApplication {
         user.setId(2);
         user.setFirstname("jean");
         dao.update(user);
+
+        for (Object obj : dao.select()) {
+            System.out.println(obj.toString());
+        }
         /*
         try {
             User.playDrop();

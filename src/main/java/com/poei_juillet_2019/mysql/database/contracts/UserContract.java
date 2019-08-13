@@ -72,6 +72,20 @@ public class UserContract {
         return result.toString();
     }
 
+    public final static String SELECTALL() {
+        StringBuilder result = new StringBuilder();
+        result.append("SELECT ");
+
+        int j = 0;
+        for (; j < COLS.length - 1; j++) {
+            result.append(COLS[j] + ",");
+        }
+        result.append(COLS[j]);
+        result.append(" FROM " + TABLE);
+
+        return result.toString();
+    }
+
     public final static String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS "+ TABLE +"(" +
             COL_ID + " int NOT NULL AUTO_INCREMENT PRIMARY KEY," +
             COL_FIRSTNAME + " VARCHAR(255) NOT NULL," +
