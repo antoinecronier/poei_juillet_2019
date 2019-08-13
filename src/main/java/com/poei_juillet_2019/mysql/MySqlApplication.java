@@ -18,6 +18,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.mysql.fabric.xmlrpc.base.Data;
+import com.poei_juillet_2019.mysql.database.DbManager;
 import com.poei_juillet_2019.mysql.database.DbOpenHelper;
 import com.poei_juillet_2019.mysql.database.UserDao;
 import com.poei_juillet_2019.mysql.entities.User;
@@ -40,25 +41,24 @@ public final class MySqlApplication {
      */
     public static void main(String[] args) throws ParseException {
 
-        UserDao dao = new UserDao();
-        dao.drop();
-        dao.create();
+        DbManager.getInstance().getUserDao().drop();
+        DbManager.getInstance().getUserDao().create();
         User user = new User("raoul", "michel", new SimpleDateFormat("yyyy/mm/dd").parse("1990/04/24"));
-        dao.insert(user);
-        dao.insert(user);
+        DbManager.getInstance().getUserDao().insert(user);
+        DbManager.getInstance().getUserDao().insert(user);
         User user1 = new User("rjsdfojdsojf", "sdfsdfsdf", new SimpleDateFormat("yyyy/mm/dd").parse("1980/04/24"));
-        dao.insert(user1);
+        DbManager.getInstance().getUserDao().insert(user1);
         user.setId(1);
-        dao.delete(user);
+        DbManager.getInstance().getUserDao().delete(user);
         user.setId(2);
         user.setFirstname("jean");
-        dao.update(user);
+        DbManager.getInstance().getUserDao().update(user);
 
-        for (Object obj : dao.select()) {
+        for (Object obj : DbManager.getInstance().getUserDao().select()) {
             System.out.println(obj.toString());
         }
 
-        System.out.println(dao.select(2));
+        System.out.println(DbManager.getInstance().getUserDao().select(2));
         /*
         try {
             User.playDrop();
