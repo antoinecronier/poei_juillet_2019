@@ -49,6 +49,21 @@ public class UserContract {
         return result.toString();
     }
 
+    public final static String UPDATE() {
+        StringBuilder result = new StringBuilder();
+        result.append("UPDATE " + TABLE + " SET ");
+
+        int j = 1;
+        for (; j < COLS.length - 1; j++) {
+            result.append(COLS[j] + " = ?,");
+        }
+        result.append(COLS[j] + " = ? ");
+
+        result.append(" WHERE " + COL_ID + " = ?");
+
+        return result.toString();
+    }
+
     public final static String DELETE() {
         StringBuilder result = new StringBuilder();
 

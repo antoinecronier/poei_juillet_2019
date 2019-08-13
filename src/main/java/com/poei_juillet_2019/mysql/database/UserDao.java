@@ -78,8 +78,32 @@ public class UserDao implements Dao {
 
     @Override
     public void update(Object obj) {
-        // TODO Auto-generated method stub
+        if (obj instanceof User) {
+            User item = (User) obj;
 
+            SimpleDateFormat sdf = new java.text.SimpleDateFormat("YYYY-MM-DD hh:mm:ss");
+            String mySqlDateOfBirth = sdf.format(item.getDateOfBirth());
+
+            String request = UserContract.UPDATE();
+            PreparedStatement ps = null;
+            try {
+                ps = DbOpenHelper.getInstance().getConn()
+                    .prepareStatement(request);
+                ps.setString(1, item.getFirstname());
+                ps.setString(2, item.getLastname());
+                ps.setString(3, mySqlDateOfBirth);
+                ps.setInt(4, item.getId());
+                ps.execute();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     @Override

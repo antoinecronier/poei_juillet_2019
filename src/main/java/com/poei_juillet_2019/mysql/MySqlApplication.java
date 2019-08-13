@@ -46,8 +46,13 @@ public final class MySqlApplication {
         User user = new User("raoul", "michel", new SimpleDateFormat("yyyy/mm/dd").parse("1990/04/24"));
         dao.insert(user);
         dao.insert(user);
+        User user1 = new User("rjsdfojdsojf", "sdfsdfsdf", new SimpleDateFormat("yyyy/mm/dd").parse("1980/04/24"));
+        dao.insert(user1);
         user.setId(1);
         dao.delete(user);
+        user.setId(2);
+        user.setFirstname("jean");
+        dao.update(user);
         /*
         try {
             User.playDrop();
