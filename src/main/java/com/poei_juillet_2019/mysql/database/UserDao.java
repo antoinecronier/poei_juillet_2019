@@ -145,21 +145,9 @@ public class UserDao implements Dao {
                 .prepareStatement(request);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                User item = new User();
-                item.setId(rs.getInt(rs.findColumn(UserContract.COL_ID)));
-                item.setFirstname(rs.getString(rs.findColumn(UserContract.COL_FIRSTNAME)));
-                item.setLastname(rs.getString(rs.findColumn(UserContract.COL_LASTNAME)));
-
-//                SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD hh:mm:ss");
-//                String sqlDate = rs.getString(rs.findColumn(UserContract.COL_DATE_OF_BIRTH));
-//                Date javaDate = sdf.parse(sqlDate);
-//                item.setDateOfBirth( javaDate);
-
-                item.setDateOfBirth(
-                        new SimpleDateFormat("YYYY-MM-DD hh:mm:ss")
-                            .parse(rs.getString(rs.findColumn(UserContract.COL_DATE_OF_BIRTH))));
-                result.add(item);
+                result.add(parseFromDbToJava(rs));
             }
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ParseException e) {
@@ -177,8 +165,50 @@ public class UserDao implements Dao {
 
     @Override
     public Object select(int id) {
-        // TODO Auto-generated method stub
-        return null;
+        User result = null;
+
+        String request = UserContract.SELECT();
+        PreparedStatement ps = null;
+        try {
+            ps = DbOpenHelper.getInstance().getConn()
+                .prepareStatement(request);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                User item = parseFromDbToJava(rs);
+                result = item;
+            }
+            rs.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                ps.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return result;
+    }
+
+    private User parseFromDbToJava(ResultSet rs) throws SQLException, ParseException {
+        User item = new User();
+        item.setId(rs.getInt(rs.findColumn(UserContract.COL_ID)));
+        item.setFirstname(rs.getString(rs.findColumn(UserContract.COL_FIRSTNAME)));
+        item.setLastname(rs.getString(rs.findColumn(UserContract.COL_LASTNAME)));
+
+//                SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD hh:mm:ss");
+//                String sqlDate = rs.getString(rs.findColumn(UserContract.COL_DATE_OF_BIRTH));
+//                Date javaDate = sdf.parse(sqlDate);
+//                item.setDateOfBirth( javaDate);
+
+        item.setDateOfBirth(
+                new SimpleDateFormat("YYYY-MM-DD hh:mm:ss")
+                    .parse(rs.getString(rs.findColumn(UserContract.COL_DATE_OF_BIRTH))));
+        return item;
     }
 
 }

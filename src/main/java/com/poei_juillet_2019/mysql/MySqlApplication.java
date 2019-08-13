@@ -57,6 +57,8 @@ public final class MySqlApplication {
         for (Object obj : dao.select()) {
             System.out.println(obj.toString());
         }
+
+        System.out.println(dao.select(2));
         /*
         try {
             User.playDrop();
