@@ -52,7 +52,7 @@ public class UserDao implements Dao {
     }
 
     @Override
-    public void insert(Object obj) {
+    public void insert(Object obj) throws SQLException {
         if (obj instanceof User) {
             User item = (User) obj;
 
@@ -70,12 +70,12 @@ public class UserDao implements Dao {
                 ps.setString(4, mySqlDateOfBirth);
                 ps.execute();
             } catch (SQLException e) {
-                e.printStackTrace();
+                throw e;
             } finally {
                 try {
                     ps.close();
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    throw e;
                 }
             }
         }

@@ -4,6 +4,7 @@ import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -31,8 +32,9 @@ public final class MySqlApplication {
      *
      * @param args
      * @throws ParseException
+     * @throws SQLException
      */
-    public static void main(String[] args) throws ParseException {
+    public static void main(String[] args) throws ParseException, SQLException {
 
         userTests();
         roleTests();
@@ -88,7 +90,7 @@ public final class MySqlApplication {
 //        System.out.println(fielder(new User("raoul", "michel", new SimpleDateFormat("yyyy/mm/dd").parse("1990/04/24"))));
     }
 
-    private static void roleTests() {
+    private static void roleTests() throws SQLException {
         DbManager.getInstance().getRoleDao().drop();
         DbManager.getInstance().getRoleDao().create();
         Role role = new Role("role1");
@@ -109,7 +111,7 @@ public final class MySqlApplication {
         System.out.println(DbManager.getInstance().getRoleDao().select(2));
     }
 
-    private static void userTests() throws ParseException {
+    private static void userTests() throws ParseException, SQLException {
         DbManager.getInstance().getUserDao().drop();
         DbManager.getInstance().getUserDao().create();
         User user = new User("raoul", "michel", new SimpleDateFormat("yyyy/mm/dd").parse("1990/04/24"));

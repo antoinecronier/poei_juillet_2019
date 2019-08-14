@@ -50,7 +50,7 @@ public class RoleDao implements Dao {
     }
 
     @Override
-    public void insert(Object obj) {
+    public void insert(Object obj) throws SQLException {
         if (obj instanceof Role) {
             Role item = (Role) obj;
 
@@ -63,12 +63,12 @@ public class RoleDao implements Dao {
                 ps.setString(2, item.getName());
                 ps.execute();
             } catch (SQLException e) {
-                e.printStackTrace();
+                throw e;
             } finally {
                 try {
                     ps.close();
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    throw e;
                 }
             }
         }

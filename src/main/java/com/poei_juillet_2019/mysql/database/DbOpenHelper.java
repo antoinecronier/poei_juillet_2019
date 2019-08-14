@@ -11,9 +11,9 @@ public class DbOpenHelper {
     /** Constructeur privé */
     private DbOpenHelper() {
         MysqlDataSource datasource = new MysqlDataSource();
-        datasource.setUser("antoine.cronier");
-        datasource.setPassword("root");
-        datasource.setServerName("127.0.0.1");
+        datasource.setUser("user1");
+        datasource.setPassword("password");
+        datasource.setServerName("192.168.15.95");
         datasource.setDatabaseName("disco");
 
         try {

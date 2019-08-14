@@ -1,4 +1,4 @@
-package com.poei_juillet_2019.mysql.test.database;
+package com.poei_juillet_2019.mysql.test.database.utils;
 
 public class DescribeQuery {
 
