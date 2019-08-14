@@ -40,17 +40,19 @@ public class UserDaoCreateDropTest {
             describeQuery.add(desc);
         }
 
+        if (UserContract.COLS.length != describeQuery.size()) {
+            fail("not same number of lines");
+        }
+
         for (int i = 0; i < describeQuery.size(); i++) {
             if (!describeQuery.get(i).getField().equals(UserContract.COLS[i])) {
                 fail("Column name do not match");
             }
         }
-
-        assertTrue(true);
     }
 
     @Test
-    public void testGetUserDaoCreateTableInsertWorking() throws SQLException {
+    public void testGetUserDaoCreateTableInsertWorking() {
         DbManager.getInstance().getUserDao().drop();
         DbManager.getInstance().getUserDao().create();
         try {
@@ -59,8 +61,6 @@ public class UserDaoCreateDropTest {
         } catch (Exception e) {
             fail("Insertion failure");
         }
-
-        assertTrue(true);
     }
 
     @Test
@@ -88,9 +88,7 @@ public class UserDaoCreateDropTest {
             DbManager.getInstance().getUserDao()
                     .insert(new User("jonny", "jonny", new SimpleDateFormat("yyyy/mm/dd").parse("1990/04/24")));
         } catch (SQLException | ParseException e) {
-            if (e.getMessage().equals("Unknown table 'disco." + UserContract.TABLE + "'")) {
-                assertTrue(true);
-            }
+            assertTrue(e.getMessage().equals("Table 'disco." + UserContract.TABLE + "' doesn't exist"));
         }
     }
 }

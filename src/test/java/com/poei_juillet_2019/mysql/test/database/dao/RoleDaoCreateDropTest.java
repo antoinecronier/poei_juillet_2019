@@ -39,27 +39,27 @@ public class RoleDaoCreateDropTest {
             describeQuery.add(desc);
         }
 
+        if (RoleContract.COLS.length != describeQuery.size()) {
+            fail("not same number of lines");
+        }
+
         for (int i = 0; i < describeQuery.size(); i++) {
             if (!describeQuery.get(i).getField().equals(RoleContract.COLS[i])) {
                 fail("Column name do not match");
             }
         }
-
-        assertTrue(true);
     }
 
     @Test
-    public void testGetRoleDaoCreateTableInsertWorking() throws SQLException {
+    public void testGetRoleDaoCreateTableInsertWorking() {
         DbManager.getInstance().getRoleDao().drop();
         DbManager.getInstance().getRoleDao().create();
         try {
             DbManager.getInstance().getRoleDao()
-                    .insert(new Role("roleTest"));
+                    .insert(new Role("role1"));
         } catch (Exception e) {
             fail("Insertion failure");
         }
-
-        assertTrue(true);
     }
 
     @Test
@@ -77,7 +77,7 @@ public class RoleDaoCreateDropTest {
     public void testGetRoleDaoDropCannotInsert() throws SQLException, ParseException {
         DbManager.getInstance().getRoleDao().drop();
         DbManager.getInstance().getRoleDao()
-                .insert(new Role("roleTest"));
+                .insert(new Role("role1"));
     }
 
     @Test
@@ -85,11 +85,9 @@ public class RoleDaoCreateDropTest {
         DbManager.getInstance().getRoleDao().drop();
         try {
             DbManager.getInstance().getRoleDao()
-                    .insert(new Role("roleTest"));
+                    .insert(new Role("role1"));
         } catch (SQLException e) {
-            if (e.getMessage().equals("Unknown table 'disco." + RoleContract.TABLE + "'")) {
-                assertTrue(true);
-            }
+            assertTrue(e.getMessage().equals("Table 'disco." + RoleContract.TABLE + "' doesn't exist"));
         }
     }
 }

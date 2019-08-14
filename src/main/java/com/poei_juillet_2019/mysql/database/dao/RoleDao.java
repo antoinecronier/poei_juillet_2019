@@ -75,7 +75,8 @@ public class RoleDao implements Dao {
     }
 
     @Override
-    public void update(Object obj) {
+    public Integer update(Object obj) throws SQLException {
+        Integer nbTupleChanged = null;
         if (obj instanceof Role) {
             Role item = (Role) obj;
 
@@ -86,21 +87,24 @@ public class RoleDao implements Dao {
                     .prepareStatement(request);
                 ps.setString(1, item.getName());
                 ps.setInt(2, item.getId());
-                ps.execute();
+                nbTupleChanged = ps.executeUpdate();
             } catch (SQLException e) {
-                e.printStackTrace();
+                throw e;
             } finally {
                 try {
                     ps.close();
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    throw e;
                 }
             }
         }
+
+        return nbTupleChanged;
     }
 
     @Override
-    public void delete(Object obj) {
+    public Integer delete(Object obj) {
+        Integer nbTupleChanged = null;
         if (obj instanceof Role) {
             Role item = (Role) obj;
 
@@ -110,7 +114,7 @@ public class RoleDao implements Dao {
                 ps = DbOpenHelper.getInstance().getConn()
                     .prepareStatement(request);
                 ps.setInt(1, item.getId());
-                ps.execute();
+                nbTupleChanged = ps.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
             } finally {
@@ -121,6 +125,7 @@ public class RoleDao implements Dao {
                 }
             }
         }
+        return nbTupleChanged;
     }
 
     @Override

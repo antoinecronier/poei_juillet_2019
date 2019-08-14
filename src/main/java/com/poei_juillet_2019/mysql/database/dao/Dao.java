@@ -10,9 +10,9 @@ public interface Dao {
 
     public void insert(Object obj) throws SQLException;
 
-    public void update(Object obj);
+    public Integer update(Object obj) throws SQLException;
 
-    public void delete(Object obj);
+    public Integer delete(Object obj);
 
     public List<Object> select();
 

@@ -41,7 +41,7 @@ public class UserDao implements Dao {
                 .prepareStatement(UserContract.DROP_TABLE);
             ps.execute();
         } catch (SQLException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         } finally {
             try {
                 ps.close();
@@ -82,7 +82,8 @@ public class UserDao implements Dao {
     }
 
     @Override
-    public void update(Object obj) {
+    public Integer update(Object obj) throws SQLException {
+        Integer nbTupleChanged = null;
         if (obj instanceof User) {
             User item = (User) obj;
 
@@ -98,21 +99,23 @@ public class UserDao implements Dao {
                 ps.setString(2, item.getLastname());
                 ps.setString(3, mySqlDateOfBirth);
                 ps.setInt(4, item.getId());
-                ps.execute();
+                nbTupleChanged = ps.executeUpdate();
             } catch (SQLException e) {
-                e.printStackTrace();
+                throw e;
             } finally {
                 try {
                     ps.close();
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    throw e;
                 }
             }
         }
+        return nbTupleChanged;
     }
 
     @Override
-    public void delete(Object obj) {
+    public Integer delete(Object obj) {
+        Integer nbTupleChanged = null;
         if (obj instanceof User) {
             User item = (User) obj;
 
@@ -122,7 +125,7 @@ public class UserDao implements Dao {
                 ps = DbOpenHelper.getInstance().getConn()
                     .prepareStatement(request);
                 ps.setInt(1, item.getId());
-                ps.execute();
+                nbTupleChanged = ps.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
             } finally {
@@ -133,6 +136,7 @@ public class UserDao implements Dao {
                 }
             }
         }
+        return nbTupleChanged;
     }
 
     @Override
