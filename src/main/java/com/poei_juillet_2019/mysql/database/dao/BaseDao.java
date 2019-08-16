@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mysql.jdbc.Statement;
 import com.poei_juillet_2019.mysql.database.DbOpenHelper;
 import com.poei_juillet_2019.mysql.database.contracts.BaseContract;
 import com.poei_juillet_2019.mysql.entities.EntityDb;
@@ -60,7 +61,7 @@ public abstract class BaseDao<T extends EntityDb> implements Dao<T> {
         String request = contract.INSERT;
         PreparedStatement ps = null;
         try {
-            ps = DbOpenHelper.getInstance().getConn().prepareStatement(request);
+            ps = DbOpenHelper.getInstance().getConn().prepareStatement(request, Statement.RETURN_GENERATED_KEYS);
             if (item.getId() == null) {
                 ps.setNull(1, java.sql.Types.INTEGER);
             }else {
@@ -69,6 +70,11 @@ public abstract class BaseDao<T extends EntityDb> implements Dao<T> {
 
             javaToSqlInsert(item, ps);
             ps.execute();
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                item.setId(rs.getInt(1));
+            }
+
         } catch (SQLException e) {
             throw e;
         } finally {

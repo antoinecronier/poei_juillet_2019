@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.poei_juillet_2019.mysql.database.DbManager;
 import com.poei_juillet_2019.mysql.database.DbOpenHelper;
 import com.poei_juillet_2019.mysql.database.contracts.BaseContract;
 import com.poei_juillet_2019.mysql.database.contracts.UserContract;
@@ -44,8 +45,16 @@ public class UserDao extends BaseDao<User> {
         ps.setString(1, item.getFirstname());
         ps.setString(2, item.getLastname());
         ps.setString(3, mySqlDateOfBirth);
-        ps.setNull(4, java.sql.Types.INTEGER);
-        ps.setNull(5, java.sql.Types.INTEGER);
+        if (item.getRole() != null && item.getRole().getId() != null) {
+            ps.setInt(4, item.getRole().getId());
+        }else {
+            ps.setNull(4, java.sql.Types.INTEGER);
+        }
+        if (item.getEntreprise() != null && item.getEntreprise().getId() != null) {
+            ps.setInt(5, item.getEntreprise().getId());
+        }else {
+            ps.setNull(5, java.sql.Types.INTEGER);
+        }
         ps.setInt(6, item.getId());
     }
 
@@ -60,8 +69,10 @@ public class UserDao extends BaseDao<User> {
                 new SimpleDateFormat("YYYY-MM-DD hh:mm:ss")
                     .parse(rs.getString(rs.findColumn(UserContract.COL_DATE_OF_BIRTH))));
 
-        item.setRole(new Role());
-        item.setEntreprise(new Entreprise());
+        Integer roleId = rs.getInt(rs.findColumn(UserContract.COL_FK_ID_ROLE));
+        Integer entrepriseId = rs.getInt(rs.findColumn(UserContract.COL_FK_ID_ENTREPRISE));
+        item.setRole(DbManager.getInstance().getRoleDao().select(roleId));
+        item.setEntreprise(DbManager.getInstance().getEntrepriseDao().select(entrepriseId));
         return item;
     }
 }

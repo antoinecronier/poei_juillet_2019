@@ -37,9 +37,10 @@ public final class MySqlApplication {
      */
     public static void main(String[] args) throws ParseException, SQLException {
 
-        userTests();
+
         roleTests();
         entrepriseTests();
+        userTests();
         /*
         try {
             User.playDrop();
@@ -97,7 +98,7 @@ public final class MySqlApplication {
         DbManager.getInstance().getEntrepriseDao().create();
         Entreprise entreprise = new Entreprise("test1","test11","test111");
         DbManager.getInstance().getEntrepriseDao().insert(entreprise);
-        DbManager.getInstance().getEntrepriseDao().insert(entreprise);
+        //DbManager.getInstance().getEntrepriseDao().insert(entreprise);
         Entreprise entreprise1 = new Entreprise("test1","test11","test111");
         DbManager.getInstance().getEntrepriseDao().insert(entreprise1);
         entreprise.setId(1);
@@ -118,7 +119,7 @@ public final class MySqlApplication {
         DbManager.getInstance().getRoleDao().create();
         Role role = new Role("role1");
         DbManager.getInstance().getRoleDao().insert(role);
-        DbManager.getInstance().getRoleDao().insert(role);
+        //DbManager.getInstance().getRoleDao().insert(role);
         Role role1 = new Role("Role2");
         DbManager.getInstance().getRoleDao().insert(role1);
         role.setId(1);
@@ -139,13 +140,17 @@ public final class MySqlApplication {
         DbManager.getInstance().getUserDao().create();
         User user = new User("raoul", "michel", new SimpleDateFormat("yyyy/mm/dd").parse("1990/04/24"));
         DbManager.getInstance().getUserDao().insert(user);
-        DbManager.getInstance().getUserDao().insert(user);
+        //DbManager.getInstance().getUserDao().insert(user);
         User user1 = new User("rjsdfojdsojf", "sdfsdfsdf", new SimpleDateFormat("yyyy/mm/dd").parse("1980/04/24"));
         DbManager.getInstance().getUserDao().insert(user1);
-        user.setId(1);
+        //user.setId(1);
         DbManager.getInstance().getUserDao().delete(user);
         user.setId(2);
         user.setFirstname("jean");
+        user.setEntreprise(new Entreprise());
+        user.getEntreprise().setId(2);
+        user.setRole(new Role());
+        user.getRole().setId(2);
         DbManager.getInstance().getUserDao().update(user);
 
         for (Object obj : DbManager.getInstance().getUserDao().select()) {
