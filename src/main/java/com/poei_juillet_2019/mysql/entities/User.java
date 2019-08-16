@@ -7,6 +7,8 @@ public class User extends EntityDb{
     private String firstname;
     private String lastname;
     private Date dateOfBirth;
+    private Role role;
+    private Entreprise entreprise;
 
     /**
      * @return the firstname
@@ -50,15 +52,26 @@ public class User extends EntityDb{
         this.dateOfBirth = dateOfBirth;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.lang.Object#toString()
-     */
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public Entreprise getEntreprise() {
+        return entreprise;
+    }
+
+    public void setEntreprise(Entreprise entreprise) {
+        this.entreprise = entreprise;
+    }
+
     @Override
     public String toString() {
-        return "User [id=" + this.getId() + ", firstname=" + firstname + ", lastname=" + lastname + ", dateOfBirth=" + dateOfBirth
-                + "]";
+        return "User [firstname=" + firstname + ", lastname=" + lastname + ", dateOfBirth=" + dateOfBirth + ", role="
+                + role + ", entreprise=" + entreprise + ", getId()=" + getId() + "]";
     }
 
     public User() {

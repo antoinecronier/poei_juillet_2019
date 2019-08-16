@@ -40,8 +40,10 @@ public abstract class BaseDao<T extends EntityDb> implements Dao<T> {
     public void drop() {
         PreparedStatement ps = null;
         try {
+            DbOpenHelper.getInstance().getConn().createStatement().execute("SET FOREIGN_KEY_CHECKS=0");
             ps = DbOpenHelper.getInstance().getConn().prepareStatement(contract.DROP_TABLE);
             ps.execute();
+            DbOpenHelper.getInstance().getConn().createStatement().execute("SET FOREIGN_KEY_CHECKS=1");
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -59,7 +61,12 @@ public abstract class BaseDao<T extends EntityDb> implements Dao<T> {
         PreparedStatement ps = null;
         try {
             ps = DbOpenHelper.getInstance().getConn().prepareStatement(request);
-            ps.setInt(1, item.getId());
+            if (item.getId() == null) {
+                ps.setNull(1, java.sql.Types.INTEGER);
+            }else {
+                ps.setInt(1, item.getId());
+            }
+
             javaToSqlInsert(item, ps);
             ps.execute();
         } catch (SQLException e) {

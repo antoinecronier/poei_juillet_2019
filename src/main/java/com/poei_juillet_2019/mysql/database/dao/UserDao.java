@@ -3,6 +3,7 @@ package com.poei_juillet_2019.mysql.database.dao;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLType;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import com.poei_juillet_2019.mysql.database.DbOpenHelper;
 import com.poei_juillet_2019.mysql.database.contracts.BaseContract;
 import com.poei_juillet_2019.mysql.database.contracts.UserContract;
 import com.poei_juillet_2019.mysql.entities.EntityDb;
+import com.poei_juillet_2019.mysql.entities.Entreprise;
 import com.poei_juillet_2019.mysql.entities.Role;
 import com.poei_juillet_2019.mysql.entities.User;
 
@@ -30,6 +32,8 @@ public class UserDao extends BaseDao<User> {
         ps.setString(2, item.getFirstname());
         ps.setString(3, item.getLastname());
         ps.setString(4, mySqlDateOfBirth);
+        ps.setNull(5, java.sql.Types.INTEGER);
+        ps.setNull(6, java.sql.Types.INTEGER);
     }
 
     @Override
@@ -40,7 +44,9 @@ public class UserDao extends BaseDao<User> {
         ps.setString(1, item.getFirstname());
         ps.setString(2, item.getLastname());
         ps.setString(3, mySqlDateOfBirth);
-        ps.setInt(4, item.getId());
+        ps.setNull(4, java.sql.Types.INTEGER);
+        ps.setNull(5, java.sql.Types.INTEGER);
+        ps.setInt(6, item.getId());
     }
 
     @Override
@@ -53,6 +59,9 @@ public class UserDao extends BaseDao<User> {
         item.setDateOfBirth(
                 new SimpleDateFormat("YYYY-MM-DD hh:mm:ss")
                     .parse(rs.getString(rs.findColumn(UserContract.COL_DATE_OF_BIRTH))));
+
+        item.setRole(new Role());
+        item.setEntreprise(new Entreprise());
         return item;
     }
 }
