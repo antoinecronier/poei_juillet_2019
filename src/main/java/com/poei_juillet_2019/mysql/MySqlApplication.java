@@ -14,6 +14,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.poei_juillet_2019.mysql.database.DbManager;
+import com.poei_juillet_2019.mysql.entities.Entreprise;
 import com.poei_juillet_2019.mysql.entities.Role;
 import com.poei_juillet_2019.mysql.entities.User;
 
@@ -38,6 +39,7 @@ public final class MySqlApplication {
 
         userTests();
         roleTests();
+        entrepriseTests();
         /*
         try {
             User.playDrop();
@@ -88,6 +90,27 @@ public final class MySqlApplication {
 //        }
 //
 //        System.out.println(fielder(new User("raoul", "michel", new SimpleDateFormat("yyyy/mm/dd").parse("1990/04/24"))));
+    }
+
+    private static void entrepriseTests() throws SQLException {
+        DbManager.getInstance().getEntrepriseDao().drop();
+        DbManager.getInstance().getEntrepriseDao().create();
+        Entreprise entreprise = new Entreprise("test1","test11","test111");
+        DbManager.getInstance().getEntrepriseDao().insert(entreprise);
+        DbManager.getInstance().getEntrepriseDao().insert(entreprise);
+        Entreprise entreprise1 = new Entreprise("test1","test11","test111");
+        DbManager.getInstance().getEntrepriseDao().insert(entreprise1);
+        entreprise.setId(1);
+        DbManager.getInstance().getEntrepriseDao().delete(entreprise);
+        entreprise.setId(2);
+        entreprise.setNom("jean");
+        DbManager.getInstance().getEntrepriseDao().update(entreprise);
+
+        for (Object obj : DbManager.getInstance().getEntrepriseDao().select()) {
+            System.out.println(obj.toString());
+        }
+
+        System.out.println(DbManager.getInstance().getEntrepriseDao().select(2));
     }
 
     private static void roleTests() throws SQLException {

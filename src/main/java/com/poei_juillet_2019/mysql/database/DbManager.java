@@ -1,5 +1,6 @@
 package com.poei_juillet_2019.mysql.database;
 
+import com.poei_juillet_2019.mysql.database.dao.EntrepriseDao;
 import com.poei_juillet_2019.mysql.database.dao.RoleDao;
 import com.poei_juillet_2019.mysql.database.dao.UserDao;
 
@@ -7,6 +8,7 @@ public class DbManager {
 
     private UserDao userDao = new UserDao();
     private RoleDao roleDao = new RoleDao();
+    private EntrepriseDao entrepriseDao = new EntrepriseDao();
 
     /** Constructeur privé */
     private DbManager() {
@@ -39,6 +41,10 @@ public class DbManager {
      */
     public RoleDao getRoleDao() {
         return roleDao;
+    }
+
+    public EntrepriseDao getEntrepriseDao() {
+        return entrepriseDao;
     }
 
 }
