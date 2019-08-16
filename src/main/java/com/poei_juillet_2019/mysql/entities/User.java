@@ -83,4 +83,12 @@ public class User extends EntityDb{
         this.lastname = lastname;
         this.dateOfBirth = dateOfBirth;
     }
+
+    public User(String firstname, String lastname, Date dateOfBirth, Role role, Entreprise entreprise) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.dateOfBirth = dateOfBirth;
+        this.role = role;
+        this.entreprise = entreprise;
+    }
 }

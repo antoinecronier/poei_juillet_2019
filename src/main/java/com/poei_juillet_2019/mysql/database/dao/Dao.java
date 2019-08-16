@@ -10,7 +10,7 @@ public interface Dao<T extends EntityDb> {
 
     public void drop();
 
-    public void insert(T item) throws SQLException;
+    public T insert(T item) throws SQLException;
 
     public Integer update(T item) throws SQLException;
 

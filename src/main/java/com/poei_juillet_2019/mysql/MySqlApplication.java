@@ -158,6 +158,14 @@ public final class MySqlApplication {
         }
 
         System.out.println(DbManager.getInstance().getUserDao().select(2));
+
+        System.out.println("-----------------------------------");
+        User userTest = new User("hervé", "yoyo", new SimpleDateFormat("yyyy/mm/dd").parse("1980/04/24"), new Role("role1"), new Entreprise("entrepriseTest", "default adresse", "type1"));
+        DbManager.getInstance().getUserDao().insert(userTest);
+
+        for (Object obj : DbManager.getInstance().getUserDao().select()) {
+            System.out.println(obj.toString());
+        }
     }
 
     public static <T> T createContentsWithId(Long id, Class<T> clazz) {

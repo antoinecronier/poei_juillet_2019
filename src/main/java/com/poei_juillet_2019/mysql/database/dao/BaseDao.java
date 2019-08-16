@@ -57,7 +57,7 @@ public abstract class BaseDao<T extends EntityDb> implements Dao<T> {
     }
 
     @Override
-    public void insert(T item) throws SQLException {
+    public T insert(T item) throws SQLException {
         String request = contract.INSERT;
         PreparedStatement ps = null;
         try {
@@ -84,6 +84,7 @@ public abstract class BaseDao<T extends EntityDb> implements Dao<T> {
                 throw e;
             }
         }
+        return item;
     }
 
     @Override
