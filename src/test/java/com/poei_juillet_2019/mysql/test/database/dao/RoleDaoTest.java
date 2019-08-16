@@ -46,14 +46,14 @@ public class RoleDaoTest {
 
     @Test
     public void selectAllCount() throws Exception {
-        List<Object> listObjects = DbManager.getInstance().getRoleDao().select();
+        List<Role> listObjects = DbManager.getInstance().getRoleDao().select();
         DbManager.getInstance().getRoleDao().select();
         assertEquals(3, listObjects.size());
     }
 
     @Test
     public void dataCompare() throws Exception {
-        List<Object> listObjects = DbManager.getInstance().getRoleDao().select();
+        List<Role> listObjects = DbManager.getInstance().getRoleDao().select();
 
         assertTrue((roles.get(0).getId() == ((Role)listObjects.get(0)).getId()) && (roles.get(0).getName().equals(((Role)listObjects.get(0)).getName())));
     }

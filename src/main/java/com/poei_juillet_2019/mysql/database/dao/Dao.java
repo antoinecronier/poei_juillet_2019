@@ -3,18 +3,20 @@ package com.poei_juillet_2019.mysql.database.dao;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface Dao {
+import com.poei_juillet_2019.mysql.entities.EntityDb;
+
+public interface Dao<T extends EntityDb> {
     public void create();
 
     public void drop();
 
-    public void insert(Object obj) throws SQLException;
+    public void insert(T item) throws SQLException;
 
-    public Integer update(Object obj) throws SQLException;
+    public Integer update(T item) throws SQLException;
 
-    public Integer delete(Object obj);
+    public Integer delete(T item);
 
-    public List<Object> select();
+    public List<T> select();
 
-    public Object select(int id);
+    public T select(int id);
 }

@@ -1,23 +1,8 @@
 package com.poei_juillet_2019.mysql.entities;
 
-public class Role {
+public class Role extends EntityDb{
 
-    private int id;
     private String name;
-
-    /**
-     * @return the id
-     */
-    public int getId() {
-        return id;
-    }
-
-    /**
-     * @param id the id to set
-     */
-    public void setId(int id) {
-        this.id = id;
-    }
 
     /**
      * @return the name
@@ -40,7 +25,7 @@ public class Role {
 
     public Role(int id, String name) {
         super();
-        this.id = id;
+        this.setId(id);
         this.name = name;
     }
 
@@ -54,7 +39,7 @@ public class Role {
      */
     @Override
     public String toString() {
-        return "Role [id=" + id + ", name=" + name + "]";
+        return "Role [id=" + this.getId() + ", name=" + name + "]";
     }
 
 }

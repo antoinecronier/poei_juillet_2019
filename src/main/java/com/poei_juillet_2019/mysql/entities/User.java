@@ -1,32 +1,12 @@
 package com.poei_juillet_2019.mysql.entities;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.poei_juillet_2019.mysql.database.DbOpenHelper;
+public class User extends EntityDb{
 
-public class User {
-
-    private int id;
     private String firstname;
     private String lastname;
     private Date dateOfBirth;
-
-    /**
-     * @return the id
-     */
-    public int getId() {
-        return id;
-    }
-
-    /**
-     * @param id the id to set
-     */
-    public void setId(int id) {
-        this.id = id;
-    }
 
     /**
      * @return the firstname
@@ -77,7 +57,7 @@ public class User {
      */
     @Override
     public String toString() {
-        return "User [id=" + id + ", firstname=" + firstname + ", lastname=" + lastname + ", dateOfBirth=" + dateOfBirth
+        return "User [id=" + this.getId() + ", firstname=" + firstname + ", lastname=" + lastname + ", dateOfBirth=" + dateOfBirth
                 + "]";
     }
 
