@@ -1,5 +1,6 @@
 package com.poei_juillet_2019.mysql.entities;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class User extends EntityDb{

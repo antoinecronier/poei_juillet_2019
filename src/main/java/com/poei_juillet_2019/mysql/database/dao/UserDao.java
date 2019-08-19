@@ -6,6 +6,9 @@ import java.sql.SQLException;
 import java.sql.SQLType;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -27,20 +30,35 @@ public class UserDao extends BaseDao<User> {
 
     @Override
     protected void javaToSqlInsert(User item, PreparedStatement ps) throws SQLException {
-        SimpleDateFormat sdf = new java.text.SimpleDateFormat("YYYY-MM-DD hh:mm:ss");
+        SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
         String mySqlDateOfBirth = sdf.format(item.getDateOfBirth());
 
         ps.setString(2, item.getFirstname());
         ps.setString(3, item.getLastname());
         ps.setString(4, mySqlDateOfBirth);
         if (item.getRole() != null) {
-            item.setRole(DbManager.getInstance().getRoleDao().insert(item.getRole()));
+            if (item.getRole().getId() == null) {
+                item.setRole(DbManager.getInstance().getRoleDao().insert(item.getRole()));
+            }else {
+                int haveChanged = DbManager.getInstance().getRoleDao().update(item.getRole());
+                if (haveChanged == 0) {
+                    item.setRole(DbManager.getInstance().getRoleDao().insert(item.getRole()));
+                }
+            }
             ps.setInt(5, item.getRole().getId());
+
         } else {
             ps.setNull(5, java.sql.Types.INTEGER);
         }
         if (item.getEntreprise() != null) {
-            item.setEntreprise(DbManager.getInstance().getEntrepriseDao().insert(item.getEntreprise()));
+            if (item.getEntreprise().getId() == null) {
+                item.setEntreprise(DbManager.getInstance().getEntrepriseDao().insert(item.getEntreprise()));
+            }else {
+                int haveChanged = DbManager.getInstance().getEntrepriseDao().update(item.getEntreprise());
+                if (haveChanged == 0) {
+                    item.setEntreprise(DbManager.getInstance().getEntrepriseDao().insert(item.getEntreprise()));
+                }
+            }
             ps.setInt(6, item.getEntreprise().getId());
         } else {
             ps.setNull(6, java.sql.Types.INTEGER);
@@ -75,8 +93,11 @@ public class UserDao extends BaseDao<User> {
         item.setFirstname(rs.getString(rs.findColumn(UserContract.COL_FIRSTNAME)));
         item.setLastname(rs.getString(rs.findColumn(UserContract.COL_LASTNAME)));
 
-        item.setDateOfBirth(new SimpleDateFormat("YYYY-MM-DD hh:mm:ss")
-                .parse(rs.getString(rs.findColumn(UserContract.COL_DATE_OF_BIRTH))));
+        String date = rs.getString(rs.findColumn(UserContract.COL_DATE_OF_BIRTH));
+        date = date.substring(0, 10);
+
+        item.setDateOfBirth(new SimpleDateFormat("YYYY-MM-DD")
+                .parse(date));
 
         Integer roleId = rs.getInt(rs.findColumn(UserContract.COL_FK_ID_ROLE));
         Integer entrepriseId = rs.getInt(rs.findColumn(UserContract.COL_FK_ID_ENTREPRISE));
