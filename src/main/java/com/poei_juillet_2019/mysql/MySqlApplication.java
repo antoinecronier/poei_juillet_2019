@@ -19,6 +19,9 @@ import java.util.stream.Collectors;
 
 import com.github.javafaker.Faker;
 import com.poei_juillet_2019.mysql.database.DbManager;
+import com.poei_juillet_2019.mysql.database.entitesgenerator.EntrepriseGenerator;
+import com.poei_juillet_2019.mysql.database.entitesgenerator.RoleGenerator;
+import com.poei_juillet_2019.mysql.database.entitesgenerator.UserGenerator;
 import com.poei_juillet_2019.mysql.entities.Entreprise;
 import com.poei_juillet_2019.mysql.entities.Role;
 import com.poei_juillet_2019.mysql.entities.User;
@@ -42,72 +45,106 @@ public final class MySqlApplication {
      */
     public static void main(String[] args) throws ParseException, SQLException {
 
-        Faker faker = new Faker(Locale.FRENCH);
+        DbManager.getInstance().getUserDao().drop();
 
-        List<String> professions = new ArrayList<String>();
-        int i = 0;
-        while (i < 10) {
-            String prof = faker.company().profession();
-            if (!professions.contains(prof)) {
-                professions.add(prof);
-                i++;
-            }
-        }
-
-        DbManager.getInstance().getRoleDao().drop();
-        DbManager.getInstance().getRoleDao().create();
-
-        List<Role> roles = new ArrayList<>();
-        for (String prof : professions) {
-            Role role = new Role(prof);
-            roles.add(DbManager.getInstance().getRoleDao().insert(role));
-        }
-
-        for (Role role : DbManager.getInstance().getRoleDao().select()) {
-            System.out.println(role);
-        }
-
-        DbManager.getInstance().getEntrepriseDao().drop();
-        DbManager.getInstance().getEntrepriseDao().create();
-
-        List<String> companies = new ArrayList<String>();
-        List<Entreprise> entreprises = new ArrayList<Entreprise>();
-
-        i = 0;
-        while (i < 10) {
-            String comp = faker.company().name();
-            if (!companies.contains(comp)) {
-                companies.add(comp);
-
-                Entreprise entreprise = new Entreprise(comp, faker.address().streetAddress(),
-                        faker.company().industry());
-                entreprises.add(DbManager.getInstance().getEntrepriseDao().insert(entreprise));
-
-                i++;
-            }
-        }
+        EntrepriseGenerator.getInstance().generateAndInsertDatasDroppingTable(10);
+        RoleGenerator.getInstance().generateAndInsertDatasDroppingTable(10);
+        UserGenerator.getInstance().generateAndInsertDatasDroppingTable(1000);
 
         for (Entreprise entreprise : DbManager.getInstance().getEntrepriseDao().select()) {
             System.out.println(entreprise);
         }
 
+        System.out.println("--------------------------");
 
-        DbManager.getInstance().getUserDao().drop();
-        DbManager.getInstance().getUserDao().create();
-
-        i = 0;
-        while (i < 10) {
-            User user = new User(faker.name().firstName(), faker.name().lastName(), faker.date().birthday());
-            user.setEntreprise(entreprises.get(faker.random().nextInt(0, entreprises.size()-1)));
-            user.setRole(roles.get(faker.random().nextInt(0, roles.size()-1)));
-            DbManager.getInstance().getUserDao().insert(user);
-
-            i++;
+        for (Role role : DbManager.getInstance().getRoleDao().select()) {
+            System.out.println(role);
         }
+
+        System.out.println("--------------------------");
 
         for (User user : DbManager.getInstance().getUserDao().select()) {
             System.out.println(user);
         }
+
+        System.out.println("--------------------------");
+
+        UserGenerator.getInstance().generateAndInsertDatasDroppingTable(100);
+        DbManager.getInstance().getUserDao().insert(new User("test", "test1", new SimpleDateFormat("yyyy/mm/dd").parse("1990/04/24")));
+        for (User user : DbManager.getInstance().getUserDao().select()) {
+            System.out.println(user);
+        }
+
+        UserGenerator.getInstance().deleteDatas();
+        EntrepriseGenerator.getInstance().deleteDatas();
+        RoleGenerator.getInstance().deleteDatas();
+
+//        Faker faker = new Faker(Locale.FRENCH);
+//
+//        List<String> professions = new ArrayList<String>();
+//        int i = 0;
+//        while (i < 10) {
+//            String prof = faker.company().profession();
+//            if (!professions.contains(prof)) {
+//                professions.add(prof);
+//                i++;
+//            }
+//        }
+//
+//        DbManager.getInstance().getRoleDao().drop();
+//        DbManager.getInstance().getRoleDao().create();
+//
+//        List<Role> roles = new ArrayList<>();
+//        for (String prof : professions) {
+//            Role role = new Role(prof);
+//            roles.add(DbManager.getInstance().getRoleDao().insert(role));
+//        }
+//
+//        for (Role role : DbManager.getInstance().getRoleDao().select()) {
+//            System.out.println(role);
+//        }
+//
+//        DbManager.getInstance().getEntrepriseDao().drop();
+//        DbManager.getInstance().getEntrepriseDao().create();
+//
+//        List<String> companies = new ArrayList<String>();
+//        List<Entreprise> entreprises = new ArrayList<Entreprise>();
+//
+//        i = 0;
+//        while (i < 10) {
+//            String comp = faker.company().name();
+//            if (!companies.contains(comp)) {
+//                companies.add(comp);
+//
+//                Entreprise entreprise = new Entreprise(comp, faker.address().streetAddress(),
+//                        faker.company().industry());
+//                entreprises.add(DbManager.getInstance().getEntrepriseDao().insert(entreprise));
+//
+//                i++;
+//            }
+//        }
+//
+//        for (Entreprise entreprise : DbManager.getInstance().getEntrepriseDao().select()) {
+//            System.out.println(entreprise);
+//        }
+//
+//
+//        DbManager.getInstance().getUserDao().drop();
+//        DbManager.getInstance().getUserDao().create();
+//
+//        i = 0;
+//        while (i < 10000) {
+//            User user = new User(faker.name().firstName(), faker.name().lastName(), faker.date().birthday());
+//            user.setEntreprise(entreprises.get(faker.random().nextInt(0, entreprises.size()-1)));
+//            user.setRole(roles.get(faker.random().nextInt(0, roles.size()-1)));
+//            DbManager.getInstance().getUserDao().insert(user);
+//
+//            i++;
+//        }
+//
+//        for (User user : DbManager.getInstance().getUserDao().select()) {
+//            System.out.println(user);
+//        }
 
 //        DbManager.getInstance().getRoleDao().drop();
 //        DbManager.getInstance().getRoleDao().create();
