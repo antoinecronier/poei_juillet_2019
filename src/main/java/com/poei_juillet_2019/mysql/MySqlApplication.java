@@ -8,17 +8,18 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Random;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
-import com.github.javafaker.Faker;
 import com.poei_juillet_2019.mysql.database.DbManager;
 import com.poei_juillet_2019.mysql.database.entitesgenerator.EntrepriseGenerator;
 import com.poei_juillet_2019.mysql.database.entitesgenerator.RoleGenerator;
@@ -38,15 +39,134 @@ public final class MySqlApplication {
 
     }
 
+    static Future<?> tn1;
+    static Future<?> tn2;
+    static Future<?> tn3;
+    static Future<?> tn4;
+
     /**
      *
      * @param args
      * @throws ParseException
      * @throws SQLException
+     * @throws InterruptedException
+     * @throws ExecutionException
      */
-    public static void main(String[] args) throws ParseException, SQLException {
+    public static void main(String[] args) throws ParseException, SQLException, InterruptedException, ExecutionException {
 
-        testGenerate();
+        //DbManager.getInstance().getUserDao().drop();
+
+        ExecutorService pool = Executors.newFixedThreadPool(5);
+
+//        pool.submit(new Callable<Void>() {
+//
+//            @Override
+//            public Void call() throws Exception {
+//                int a = 0;
+//                while (true) {
+//                    System.out.println("heyhey"+a);
+//                    a++;
+//                }
+//            }
+//        });
+//
+//        pool.submit(new Callable<Void>() {
+//
+//            @Override
+//            public Void call() throws Exception {
+//                int a = 0;
+//                while (true) {
+//                    System.out.println("coucou"+a);
+//                    a++;
+//                }
+//            }
+//        });
+        Future<?> tn0 = pool.submit(new Callable<Void>() {
+
+            @Override
+            public Void call() throws Exception {
+
+                while (true) {
+                    System.out.println(LocalDateTime.now());
+                    Thread.sleep(50);
+                }
+            }
+        });
+
+        tn1 = pool.submit(new Callable<Void>() {
+
+            @Override
+            public Void call() throws Exception {
+
+                DbManager.getInstance().getRoleDao().drop();
+                DbManager.getInstance().getRoleDao().create();
+                for (int i = 0; i < 1000; i++) {
+                    Role role = new Role("role" + i);
+                    DbManager.getInstance().getRoleDao().insert(role);
+                }
+
+                return null;
+            }
+        });
+
+        tn2 = pool.submit(new Callable<Void>() {
+
+            @Override
+            public Void call() throws Exception {
+
+                DbManager.getInstance().getEntrepriseDao().drop();
+                DbManager.getInstance().getEntrepriseDao().create();
+                for (int i = 0; i < 1000; i++) {
+                    Entreprise entreprise = new Entreprise("ent" + i, "tata", "toto");
+                    DbManager.getInstance().getEntrepriseDao().insert(entreprise);
+                }
+
+                return null;
+            }
+        });
+
+//        DbManager.getInstance().getRoleDao().drop();
+//        DbManager.getInstance().getRoleDao().create();
+//        for (int i = 0; i < 10000; i++) {
+//            Role role = new Role("role" + i);
+//            DbManager.getInstance().getRoleDao().insert(role);
+//        }
+//
+//        DbManager.getInstance().getEntrepriseDao().drop();
+//        DbManager.getInstance().getEntrepriseDao().create();
+//        for (int i = 0; i < 10000; i++) {
+//            Entreprise entreprise = new Entreprise("ent" + i, "tata", "toto");
+//            DbManager.getInstance().getEntrepriseDao().insert(entreprise);
+//        }
+
+        tn3 = pool.submit(new Callable<Void>() {
+
+            @Override
+            public Void call() throws Exception {
+
+                tn1.get();
+                for (Role role : DbManager.getInstance().getRoleDao().select()) {
+                    System.out.println(role);
+                }
+                return null;
+            }
+        });
+
+        tn4 = pool.submit(new Callable<Void>() {
+
+            @Override
+            public Void call() throws Exception {
+
+                tn2.get();
+                for (Entreprise entreprise : DbManager.getInstance().getEntrepriseDao().select()) {
+                    System.out.println(entreprise);
+                }
+                return null;
+            }
+        });
+
+
+//        testGenerate();
 
 //        Faker faker = new Faker(Locale.FRENCH);
 //
