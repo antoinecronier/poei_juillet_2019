@@ -30,7 +30,7 @@ public class RoleGenerator {
         return INSTANCE;
     }
 
-    Faker faker = new Faker(Locale.FRENCH);
+    private Faker faker = new Faker(Locale.FRENCH);
     private List<Role> datas = new ArrayList<Role>();
 
     public List<Role> generateDatas() throws SQLException

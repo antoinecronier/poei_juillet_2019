@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import com.github.javafaker.Faker;
@@ -45,39 +46,7 @@ public final class MySqlApplication {
      */
     public static void main(String[] args) throws ParseException, SQLException {
 
-        DbManager.getInstance().getUserDao().drop();
-
-        EntrepriseGenerator.getInstance().generateAndInsertDatasDroppingTable(10);
-        RoleGenerator.getInstance().generateAndInsertDatasDroppingTable(10);
-        UserGenerator.getInstance().generateAndInsertDatasDroppingTable(1000);
-
-        for (Entreprise entreprise : DbManager.getInstance().getEntrepriseDao().select()) {
-            System.out.println(entreprise);
-        }
-
-        System.out.println("--------------------------");
-
-        for (Role role : DbManager.getInstance().getRoleDao().select()) {
-            System.out.println(role);
-        }
-
-        System.out.println("--------------------------");
-
-        for (User user : DbManager.getInstance().getUserDao().select()) {
-            System.out.println(user);
-        }
-
-        System.out.println("--------------------------");
-
-        UserGenerator.getInstance().generateAndInsertDatasDroppingTable(100);
-        DbManager.getInstance().getUserDao().insert(new User("test", "test1", new SimpleDateFormat("yyyy/mm/dd").parse("1990/04/24")));
-        for (User user : DbManager.getInstance().getUserDao().select()) {
-            System.out.println(user);
-        }
-
-        UserGenerator.getInstance().deleteDatas();
-        EntrepriseGenerator.getInstance().deleteDatas();
-        RoleGenerator.getInstance().deleteDatas();
+        testGenerate();
 
 //        Faker faker = new Faker(Locale.FRENCH);
 //
@@ -193,6 +162,43 @@ public final class MySqlApplication {
 //        }
 //
 //        System.out.println(fielder(new User("raoul", "michel", new SimpleDateFormat("yyyy/mm/dd").parse("1990/04/24"))));
+    }
+
+    private static void testGenerate() throws SQLException, ParseException {
+        DbManager.getInstance().getUserDao().drop();
+
+        EntrepriseGenerator.getInstance().generateAndInsertDatasDroppingTable(10);
+        RoleGenerator.getInstance().generateAndInsertDatasDroppingTable(10);
+        UserGenerator.getInstance().generateAndInsertDatasDroppingTable(1000);
+
+        for (Entreprise entreprise : DbManager.getInstance().getEntrepriseDao().select()) {
+            System.out.println(entreprise);
+        }
+
+        System.out.println("--------------------------");
+
+        for (Role role : DbManager.getInstance().getRoleDao().select()) {
+            System.out.println(role);
+        }
+
+        System.out.println("--------------------------");
+
+        for (User user : DbManager.getInstance().getUserDao().select()) {
+            System.out.println(user);
+        }
+
+        System.out.println("--------------------------");
+
+        UserGenerator.getInstance().generateAndInsertDatasDroppingTable(100);
+        DbManager.getInstance().getUserDao()
+                .insert(new User("test", "test1", new SimpleDateFormat("yyyy/mm/dd").parse("1990/04/24")));
+        for (User user : DbManager.getInstance().getUserDao().select()) {
+            System.out.println(user);
+        }
+
+        UserGenerator.getInstance().deleteDatas();
+        EntrepriseGenerator.getInstance().deleteDatas();
+        RoleGenerator.getInstance().deleteDatas();
     }
 
     private static void entrepriseTests() throws SQLException {

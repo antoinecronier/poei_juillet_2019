@@ -34,7 +34,7 @@ public class UserGenerator {
         return INSTANCE;
     }
 
-    Faker faker = new Faker(Locale.FRENCH);
+    private Faker faker = new Faker(Locale.FRENCH);
     private List<User> datas = new ArrayList<User>();
 
     public void refresh() {
